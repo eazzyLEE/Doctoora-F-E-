@@ -16,10 +16,24 @@ class Landing extends Component {
   onSubmit(e) {
     e.preventDefault();
 
-    const user = {
-      username: this.state.username
-    };
-    //this.props.createProfile(profileData, this.props.history);
+    const userText = e.target.value;
+
+    // if (userText !== "") {
+    //   // Make http call
+    //   gitProfile.getUser(userText).then(data => {
+    //     if (data.profile.message === "Not Found") {
+    //       // Show alert
+    //       ui.showAlert("User  not found", "alert alert-danger");
+    //     } else {
+    //       // Show profile
+    //       ui.showProfile(data.profile);
+    //       ui.showRepos(data.repos);
+    //     }
+    //   });
+    // } else {
+    //   // Clear profile
+    //   ui.clearProfile();
+    // }
   }
 
   onChange(e) {

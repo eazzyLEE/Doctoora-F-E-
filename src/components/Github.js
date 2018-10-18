@@ -9,38 +9,46 @@ class Github extends Component {
       clientSecret: "c4cda16892451ff4bafaadcb0ecf45e88cb08e3b",
       count: 5,
       sort: "created: asc",
+      profile: {},
       repos: []
     };
   }
 
-  componentWillUpdate() {
+  componentWillReceiveProps() {
     const { username } = this.props;
     const { count, sort, clientId, clientSecret } = this.state;
 
-    fetch(
-      `https://api.github.com/users/${username}/repos?per_page=${count}&sort=${sort}&client_id=${clientId}&client_secret=${clientSecret}`
-    )
-      .then(res => res.json())
-      .then(data => {
-        if (data.message === "Not Found") {
-          // Show alert
-          alert("User  not found", "alert alert-danger");
-        } else if (this.refs.myRef) {
-          this.setState({ repos: data });
-        }
-      })
+    Promise.all([
+      fetch(
+        `https://api.github.com/users/${username}?client_id=${clientId}&client_secret=${clientSecret}`
+      ),
+      fetch(
+        `https://api.github.com/users/${username}/repos?per_page=${count}&sort=${sort}&client_id=${clientId}&client_secret=${clientSecret}`
+      )
+    ])
+      .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
+      .then(([data1, data2]) =>
+        this.setState({
+          profile: data1,
+          repos: data2
+        })
+      )
       .catch(err => console.log(err));
+
+    // fetch(
+    //   `https://api.github.com/users/${username}/repos?per_page=${count}&sort=${sort}&client_id=${clientId}&client_secret=${clientSecret}`
+    // )
   }
 
   render() {
-    const { repos } = this.state;
-    const repoItems = repos.map(repo => (
-      <div key={repo.id} className="card card-body mb-2">
+    const { profile, repos } = this.state;
+    const profileItem = (
+      <div key={profile.id} className="card card-body mb-2">
         <div class="row">
           <div class="col-md-3">
-            <img class="img-fluid mb-2" src={repo.avatar_url} alt="" />
+            <img class="img-fluid mb-2" src={profile.avatar_url} alt="" />
             <a
-              href={repo.html_url}
+              href={profile.html_url}
               target="_blank"
               rel="noopener noreferrer"
               class="btn btn-primary btn-block mb-4"
@@ -50,22 +58,33 @@ class Github extends Component {
           </div>
           <div class="col-md-9">
             <span class="badge badge-primary">
-              Public Repos: {repo.public_repos}
+              Public profiles: {profile.public_profiles}
             </span>
             <span class="badge badge-secondary">
-              Public Gists: {repo.public_gists}
+              Public Gists: {profile.public_gists}
             </span>
-            <span class="badge badge-success">Followers: {repo.followers}</span>
-            <span class="badge badge-0info">Following: {repo.following}</span>
+            <span class="badge badge-success">
+              Followers: {profile.followers}
+            </span>
+            <span class="badge badge-0info">
+              Following: {profile.following}
+            </span>
             <br />
             <ul class="list-group">
-              <li class="list-group-item">Company: {repo.company}</li>
-              <li class="list-group-item">Website/Blog: {repo.blog}</li>
-              <li class="list-group-item">Location: {repo.location}</li>
-              <li class="list-group-item">Member Since: {repo.created_at}</li>
+              <li class="list-group-item">Company: {profile.company}</li>
+              <li class="list-group-item">Website/Blog: {profile.blog}</li>
+              <li class="list-group-item">Location: {profile.location}</li>
+              <li class="list-group-item">
+                Member Since: {profile.created_at}
+              </li>
             </ul>
           </div>
         </div>
+      </div>
+    );
+
+    const repoItems = repos.map(repo => (
+      <div key={repo.id} className="card card-body mb-2">
         <div className="row">
           <div className="col-md-6">
             <h4>
@@ -94,9 +113,12 @@ class Github extends Component {
         </div>
       </div>
     ));
+
     return (
       <div ref="myRef">
         <hr />
+        <h3 className="mb-4">Github User</h3>
+        {profileItem}
         <h3 className="mb-4">Latest Github repos</h3>
         {repoItems}
       </div>
