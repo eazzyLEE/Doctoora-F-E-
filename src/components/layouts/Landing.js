@@ -9,40 +9,13 @@ class Landing extends Component {
     };
 
     this.onChange = this.onChange.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
+    // this.onSubmit = this.onSubmit.bind(this);
     // this.onKeyUp = this.onKeyUp.bind(this);
-  }
-
-  onSubmit(e) {
-    e.preventDefault();
-
-    const userText = e.target.value;
-
-    // if (userText !== "") {
-    //   // Make http call
-    //   gitProfile.getUser(userText).then(data => {
-    //     if (data.profile.message === "Not Found") {
-    //       // Show alert
-    //       ui.showAlert("User  not found", "alert alert-danger");
-    //     } else {
-    //       // Show profile
-    //       ui.showProfile(data.profile);
-    //       ui.showRepos(data.repos);
-    //     }
-    //   });
-    // } else {
-    //   // Clear profile
-    //   ui.clearProfile();
-    // }
   }
 
   onChange(e) {
     this.setState({ username: e.target.value });
   }
-
-  // handleKeyUp(e) {
-  //   this.setState({ username: e.target.value });
-  // }
 
   render() {
     return (
@@ -56,7 +29,7 @@ class Landing extends Component {
                   <p className="lead">
                     Enter a username to fetch a user profile and repos
                   </p>
-                  <form onSubmit={this.onSubmit}>
+                  <form>
                     <input
                       type="text"
                       id="searchUser"
@@ -64,11 +37,6 @@ class Landing extends Component {
                       placeholder="GitHub Username..."
                       value={this.state.username}
                       onChange={this.onChange}
-                    />
-                    <input
-                      type="submit"
-                      value="Submit"
-                      className="btn btn-info btn-block mt-4"
                     />
                   </form>
                 </div>

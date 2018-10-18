@@ -27,12 +27,19 @@ class Github extends Component {
       )
     ])
       .then(([res1, res2]) => Promise.all([res1.json(), res2.json()]))
-      .then(([data1, data2]) =>
-        this.setState({
-          profile: data1,
-          repos: data2
-        })
-      )
+      .then(([data1, data2]) => {
+        if (data1.message || data2.message === "Not Found") {
+          this.setState({
+            profile: {},
+            repos: []
+          });
+        } else {
+          this.setState({
+            profile: data1,
+            repos: data2
+          });
+        }
+      })
       .catch(err => console.log(err));
 
     // fetch(
