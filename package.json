@@ -2,7 +2,13 @@
   "name": "doctoora",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "npm": "6.2.0",
+    "node": "10.12.0" 
+  },
+  "homepage": "https://eazzylee.github.io/doctoora-f-e-/",
   "dependencies": {
+    "gh-pages": "^2.0.1",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-router-dom": "^4.3.1",
@@ -12,7 +18,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
